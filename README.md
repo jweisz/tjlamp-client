@@ -1,2 +1,2 @@
 # tjlamp-client
-TJLamp!
+It's like TJBot, but for your lamp!

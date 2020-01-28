@@ -17,7 +17,7 @@ tj._setupLEDStrip();
 const ws = new WebSocket(config.wsURL);
 
 ws.on('open', function open() {
-    console.log("connected to websocket server " + wsURL)
+    console.log("connected to websocket server " + config.wsURL)
 });
 
 ws.on('message', function incoming(data) {

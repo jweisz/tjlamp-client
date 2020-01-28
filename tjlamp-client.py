@@ -105,7 +105,7 @@ async def listen():
 if __name__ == '__main__':
     # must be run as root
     if not os.geteuid() == 0:
-        sys.exit('This script must be run as root in order to control the LED.')
+        sys.exit('This script must be run as root in order to control the LED.')
 
     # open the web socket and listen for commands
     asyncio.get_event_loop().run_until_complete(listen())

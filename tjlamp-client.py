@@ -33,7 +33,10 @@ class LEDStrip():
     # Get a Color from its name
     def colorFromName(self, name):
         rgba = colors.to_rgba(name)
-        return Color(255*rgba[0], 255*rgba[1], 255*rgba[2])
+        r = int(255*rgba[0])
+        g = int(255*rgba[1])
+        b = int(255*rgba[2])
+        return Color(r, g, b)
 
     # Get a Color from its hex value
     def colorFromHex(self, hex):
@@ -42,7 +45,10 @@ class LEDStrip():
             rgb = colors.hex2color(hex)
         else:
             rgb = colors.hex2color('#' + hex)
-        return Color(255*rgb[0], 255*rgb[1], 255*rgb[2])
+        r = int(255*rgb[0])
+        g = int(255*rgb[1])
+        b = int(255*rgb[2])
+        return Color(r, g, b)
     
     # Get a Color from it's name or hex value
     def parseColor(self, color):

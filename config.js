@@ -1,2 +1,1 @@
-exports.host = 'tjlamp.mybluemix.net';
-exports.port = '8080';
+exports.wsURL = 'ws://tjlamp.mybluemix.net:80/lamp';

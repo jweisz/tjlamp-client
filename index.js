@@ -14,8 +14,7 @@ var configuration = {
 var tj = new TJBot(hardware, configuration, {});
 tj._setupLEDStrip();
 
-wsURL = 'ws://' + config.host + ':' + config.port + '/lamp'
-const ws = new WebSocket(wsURL);
+const ws = new WebSocket(config.wsURL);
 
 ws.on('open', function open() {
     console.log("connected to websocket server " + wsURL)

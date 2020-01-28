@@ -85,20 +85,23 @@ async def listen():
     strip = LEDStrip(1)
     uri = "ws://tjlamp.mybluemix.net:80/lamp"
     async with websockets.connect(uri) as websocket:
+        print(f"🔌 connected to {uri}…")
         message = await websocket.recv()
-        print(f"received message: {message}")
+        print(f"🎉 received message: {message}")
         msg = json.loads(message)
         cmd = msg.get('cmd', '')
         
         if cmd == 'shine':
             color = msg.get('color', '#FFFFFF')
-            print(f" > shining with color {color}")
+            print(f"💡 shining with color {color}")
             await asyncio.create_task(strip.stripColor(color))
             
         elif cmd == 'rainbow':
+            print(f"❤️💙💚💜💛🧡🤍 rainbow!")
             await asyncio.create_task(strip.rainbow())
 
         elif cmd == 'off':
+            print(f"💡 lights out")
             await asyncio.create_task(strip.stripColor('#000000'))
 
 # Main program logic follows:

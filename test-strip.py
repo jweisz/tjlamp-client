@@ -3,6 +3,7 @@
 import os
 import sys
 import argparse
+import asyncio
 
 from rpi_ws281x import Color
 
@@ -23,17 +24,17 @@ if __name__ == '__main__':
     try:
         while True:
             print('Color wipe animations.')
-            strip.colorWipe(Color(255, 0, 0))  # Red wipe
-            strip.colorWipe(Color(0, 255, 0))  # Blue wipe
-            strip.colorWipe(Color(0, 0, 255))  # Green wipe
+            await strip.colorWipe(Color(255, 0, 0))  # Red wipe
+            await strip.colorWipe(Color(0, 255, 0))  # Blue wipe
+            await strip.colorWipe(Color(0, 0, 255))  # Green wipe
             print('Theater chase animations.')
-            strip.theaterChase(Color(127, 127, 127))  # White theater chase
-            strip.theaterChase(Color(127, 0, 0))  # Red theater chase
-            strip.theaterChase(Color(0, 0, 127))  # Blue theater chase
+            await strip.theaterChase(Color(127, 127, 127))  # White theater chase
+            await strip.theaterChase(Color(127, 0, 0))  # Red theater chase
+            await strip.theaterChase(Color(0, 0, 127))  # Blue theater chase
             print('Rainbow animations.')
-            strip.rainbow()
-            strip.rainbowCycle()
-            strip.theaterChaseRainbow()
+            await strip.rainbow()
+            await strip.rainbowCycle()
+            await strip.theaterChaseRainbow()
 
     except KeyboardInterrupt:
-        strip.colorWipe(Color(0, 0, 0), 10)
+        await strip.colorWipe(Color(0, 0, 0), 10)

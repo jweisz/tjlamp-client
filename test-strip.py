@@ -9,16 +9,7 @@ from rpi_ws281x import Color
 
 from LEDStrip import LEDStrip
 
-# Main program logic follows:
-if __name__ == '__main__':
-    # must be run as root
-    if not os.geteuid() == 0:
-        sys.exit('This script must be run as root in order to control the LED.')
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-n', '--num_leds', type=int, help='number of LEDs in the strip', default=1)
-    args = parser.parse_args()
-
+async def main(args):
     strip = LEDStrip(args.num_leds)
 
     try:
@@ -38,3 +29,15 @@ if __name__ == '__main__':
 
     except KeyboardInterrupt:
         await strip.colorWipe(Color(0, 0, 0), 10)
+
+# Main program logic follows:
+if __name__ == '__main__':
+    # must be run as root
+    if not os.geteuid() == 0:
+        sys.exit('This script must be run as root in order to control the LED.')
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-n', '--num_leds', type=int, help='number of LEDs in the strip', default=1)
+    args = parser.parse_args()
+
+    asyncio.get_event_loop().run_until_complete(main(args))

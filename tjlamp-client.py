@@ -123,25 +123,27 @@ async def listen():
     uri = "ws://tjlamp.mybluemix.net:80/lamp"
     async with websockets.connect(uri) as websocket:
         print(f"🔌 connected to {uri}…")
-        message = await websocket.recv()
-        print(f"🎉 received message: {message}")
-        msg = json.loads(message)
-        cmd = msg.get('cmd', '')
-        
-        if cmd == 'shine':
-            color = msg.get('color', '#FFFFFF')
-            c = strip.parseColor(color)
-            print(f"💡 shining with color {color}: {c}")
-            await asyncio.create_task(strip.stripColor(c))
+        async for message in websocket:
+            message = await websocket.recv()
+            print(f"🎉 received message: {message}")
+            msg = json.loads(message)
+            cmd = msg.get('cmd', '')
             
-        elif cmd == 'rainbow':
-            print(f"❤️💙💚💜💛🧡🤍 rainbow!")
-            await asyncio.create_task(strip.rainbow())
+            if cmd == 'shine':
+                color = msg.get('color', '#FFFFFF')
+                c = strip.parseColor(color)
+                print(f"💡 shining with color {color}: {c}")
+                await asyncio.create_task(strip.stripColor(c))
+                
+            elif cmd == 'rainbow':
+                print(f"❤️💙💚💜💛🧡🤍 rainbow!")
+                await asyncio.create_task(strip.rainbow())
 
-        elif cmd == 'off':
-            print(f"💡 lights out")
-            c = strip.parseColor('black')
-            await asyncio.create_task(strip.stripColor(c))
+            elif cmd == 'off':
+                print(f"💡 lights out")
+                c = strip.parseColor('black')
+                await asyncio.create_task(strip.stripColor(c))
+    print(f"🔌 disconnected")
 
 # Main program logic follows:
 if __name__ == '__main__':

@@ -32,14 +32,17 @@ class LEDStrip():
     
     # Get a Color from its name
     def colorFromName(self, name):
+        print(f"🐞 colorFromName: {name}")
         rgba = colors.to_rgba(name)
         r = int(255*rgba[0])
         g = int(255*rgba[1])
         b = int(255*rgba[2])
+        print(f"🐞 colorFromName r: {r}, g: {g}, b: {b}")
         return Color(r, g, b)
 
     # Get a Color from its hex value
     def colorFromHex(self, hex):
+        print(f"🐞 colorFromHex: {hex}")
         rgb = (0,0,0)
         if hex.startswith('#'):
             rgb = colors.hex2color(hex)
@@ -48,12 +51,15 @@ class LEDStrip():
         r = int(255*rgb[0])
         g = int(255*rgb[1])
         b = int(255*rgb[2])
+        print(f"🐞 colorFromHex r: {r}, g: {g}, b: {b}")
         return Color(r, g, b)
     
     # Get a Color from it's name or hex value
     def parseColor(self, color):
+        print(f"🐞 parseColor: {color}")
         c = Color(255, 255, 255)
         if color.startswith('#'):
+            print(f"🐞 parseColor it's hex!")
             c = self.colorFromHex(color)
         else:
             try:
@@ -63,7 +69,7 @@ class LEDStrip():
                     c = self.colorFromHex(color)
                 except ValueError:
                     pass
-            return c
+        return c
     
     # Set the strip to a single color
     async def stripColor(self, color):

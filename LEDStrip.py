@@ -1,3 +1,4 @@
+import time
 import asyncio
 from rpi_ws281x import PixelStrip, Color
 from matplotlib import colors

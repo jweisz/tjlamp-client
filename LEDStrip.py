@@ -1,4 +1,3 @@
-import time
 import asyncio
 from rpi_ws281x import PixelStrip, Color
 from matplotlib import colors
@@ -78,7 +77,7 @@ class LEDStrip():
         for i in range(self.strip.numPixels()):
             self.strip.setPixelColor(i, color)
             self.strip.show()
-            time.sleep(wait_ms / 1000.0)
+            await asyncio.sleep(wait_ms / 1000.0)
 
     async def theaterChase(self, color, wait_ms=50, iterations=10):
         """Movie theater light style chaser animation."""
@@ -87,7 +86,7 @@ class LEDStrip():
                 for i in range(0, self.strip.numPixels(), 3):
                     self.strip.setPixelColor(i + q, color)
                 self.strip.show()
-                time.sleep(wait_ms / 1000.0)
+                await asyncio.sleep(wait_ms / 1000.0)
                 for i in range(0, self.strip.numPixels(), 3):
                     self.strip.setPixelColor(i + q, 0)
 
@@ -95,26 +94,26 @@ class LEDStrip():
         """Draw rainbow that fades across all pixels at once."""
         for j in range(256 * iterations):
             for i in range(self.strip.numPixels()):
-                self.strip.setPixelColor(i, wheel((i + j) & 255))
+                self.strip.setPixelColor(i, self.wheel((i + j) & 255))
             self.strip.show()
-            time.sleep(wait_ms / 1000.0)
+            await asyncio.sleep(wait_ms / 1000.0)
 
     async def rainbowCycle(self, wait_ms=20, iterations=5):
         """Draw rainbow that uniformly distributes itself across all pixels."""
         for j in range(256 * iterations):
             for i in range(self.strip.numPixels()):
-                self.strip.setPixelColor(i, wheel(
+                self.strip.setPixelColor(i, self.wheel(
                     (int(i * 256 / self.strip.numPixels()) + j) & 255))
             self.strip.show()
-            time.sleep(wait_ms / 1000.0)
+            await asyncio.sleep(wait_ms / 1000.0)
 
     async def theaterChaseRainbow(self, wait_ms=50):
         """Rainbow movie theater light style chaser animation."""
         for j in range(256):
             for q in range(3):
                 for i in range(0, self.strip.numPixels(), 3):
-                    self.strip.setPixelColor(i + q, wheel((i + j) % 255))
+                    self.strip.setPixelColor(i + q, self.wheel((i + j) % 255))
                 self.strip.show()
-                time.sleep(wait_ms / 1000.0)
+                await asyncio.sleep(wait_ms / 1000.0)
                 for i in range(0, self.strip.numPixels(), 3):
                     self.strip.setPixelColor(i + q, 0)

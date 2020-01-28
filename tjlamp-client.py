@@ -8,6 +8,7 @@ import argparse
 import asyncio
 import websockets
 from rpi_ws281x import PixelStrip, Color
+from matplotlib import colors
 
 class LEDStrip():
     def __init__(self, count, pin=18, freq_hz=80000, dma=10, invert=False, brightness=255, channel=0):
@@ -17,6 +18,47 @@ class LEDStrip():
         # Intialize the library (must be called once before other functions).
         self.strip.begin()
 
+    # Generate colors around the color wheel
+    def wheel(self, pos):
+        """Generate rainbow colors across 0-255 positions."""
+        if pos < 85:
+            return Color(pos * 3, 255 - pos * 3, 0)
+        elif pos < 170:
+            pos -= 85
+            return Color(255 - pos * 3, 0, pos * 3)
+        else:
+            pos -= 170
+            return Color(0, pos * 3, 255 - pos * 3)
+    
+    # Get a Color from its name
+    def colorFromName(self, name):
+        rgba = colors.to_rgba(name)
+        return Color(255*rgba[0], 255*rgba[1], 255*rgba[2])
+
+    # Get a Color from its hex value
+    def colorFromHex(self, hex):
+        rgb = (0,0,0)
+        if hex.startswith('#'):
+            rgb = colors.hex2color(hex)
+        else:
+            rgb = colors.hex2color('#' + hex)
+        return Color(255*rgb[0], 255*rgb[1], 255*rgb[2])
+    
+    # Get a Color from it's name or hex value
+    def parseColor(self, color):
+        c = Color(255, 255, 255)
+        if color.startswith('#'):
+            c = self.colorFromHex(color)
+        else:
+            try:
+                c = self.colorFromName(color)
+            except ValueError:
+                try:
+                    c = self.colorFromHex(color)
+                except ValueError:
+                    pass
+            return c
+    
     # Set the strip to a single color
     async def stripColor(self, color):
         for i in range(self.strip.numPixels()):
@@ -42,18 +84,7 @@ class LEDStrip():
                 for i in range(0, self.strip.numPixels(), 3):
                     self.strip.setPixelColor(i + q, 0)
 
-    async def wheel(self, pos):
-        """Generate rainbow colors across 0-255 positions."""
-        if pos < 85:
-            return Color(pos * 3, 255 - pos * 3, 0)
-        elif pos < 170:
-            pos -= 85
-            return Color(255 - pos * 3, 0, pos * 3)
-        else:
-            pos -= 170
-            return Color(0, pos * 3, 255 - pos * 3)
-
-    async def rainbow(wait_ms=20, iterations=1):
+    async def rainbow(self, wait_ms=20, iterations=1):
         """Draw rainbow that fades across all pixels at once."""
         for j in range(256 * iterations):
             for i in range(self.strip.numPixels()):
@@ -61,7 +92,7 @@ class LEDStrip():
             self.strip.show()
             time.sleep(wait_ms / 1000.0)
 
-    async def rainbowCycle(wait_ms=20, iterations=5):
+    async def rainbowCycle(self, wait_ms=20, iterations=5):
         """Draw rainbow that uniformly distributes itself across all pixels."""
         for j in range(256 * iterations):
             for i in range(self.strip.numPixels()):
@@ -70,7 +101,7 @@ class LEDStrip():
             self.strip.show()
             time.sleep(wait_ms / 1000.0)
 
-    async def theaterChaseRainbow(wait_ms=50):
+    async def theaterChaseRainbow(self, wait_ms=50):
         """Rainbow movie theater light style chaser animation."""
         for j in range(256):
             for q in range(3):
@@ -93,8 +124,9 @@ async def listen():
         
         if cmd == 'shine':
             color = msg.get('color', '#FFFFFF')
-            print(f"💡 shining with color {color}")
-            await asyncio.create_task(strip.stripColor(color))
+            c = strip.parseColor(color)
+            print(f"💡 shining with color {color}: {c}")
+            await asyncio.create_task(strip.stripColor(c))
             
         elif cmd == 'rainbow':
             print(f"❤️💙💚💜💛🧡🤍 rainbow!")
@@ -102,7 +134,8 @@ async def listen():
 
         elif cmd == 'off':
             print(f"💡 lights out")
-            await asyncio.create_task(strip.stripColor('#000000'))
+            c = strip.parseColor('black')
+            await asyncio.create_task(strip.stripColor(c))
 
 # Main program logic follows:
 if __name__ == '__main__':

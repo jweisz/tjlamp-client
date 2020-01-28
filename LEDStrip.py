@@ -3,7 +3,7 @@ from rpi_ws281x import PixelStrip, Color
 from matplotlib import colors
 
 class LEDStrip():
-    def __init__(self, count, pin=18, freq_hz=80000, dma=10, invert=False, brightness=255, channel=0):
+    def __init__(self, count, pin=18, freq_hz=800000, dma=10, invert=False, brightness=255, channel=0):
         print(f"💡 initializing LED strip with {count} neopixels")
 
         # Create NeoPixel object with appropriate configuration.

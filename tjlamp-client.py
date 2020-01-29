@@ -28,23 +28,30 @@ async def listen(uri, num_leds):
             # off -> blankStrip()
             if cmd == 'shine':
                 color = msg.get('color', '#FFFFFF')
-                c = strip.parseColor(color)
-                print(f"💡 shining with color {color}: {strip.colorToHex(c)}")
-                strip.stripColor(c)
+
+                if color == 'rainbow':
+                    print(f"❤️💙💚💜💛🧡🤍 rainbow!")
+                    strip.rainbowCycle()
+                else:
+                    c = strip.parseColor(color)
+                    print(f"💡 shining with color {color}: {strip.colorToHex(c)}")
+                    strip.stripColor(c)
             
             elif cmd == 'pulse':
                 color = msg.get('color', '#FFFFFF')
-                c = strip.parseColor(color)
-                print(f"💡 pulsing with color {color}: {strip.colorToHex(c)}")
-                strip.theaterChase(c)
 
-            elif cmd == 'rainbow':
-                print(f"❤️💙💚💜💛🧡🤍 rainbow!")
-                strip.rainbowCycle()
-
-            elif cmd == 'rainbowPulse':
-                print(f"❤️💙💚💜💛🧡🤍 pulsing rainbow!")
-                strip.theaterChaseRainbow()
+                if color == 'rainbow':
+                    print(f"❤️💙💚💜💛🧡🤍 pulsing rainbow!")
+                    strip.theaterChaseRainbow()
+                else:
+                    c = strip.parseColor(color)
+                    print(f"💡 pulsing with color {color}: {strip.colorToHex(c)}")
+                    strip.theaterChase(c)
+            
+            elif cmd == 'on':
+                print(f"💡 lights on")
+                c = strip.parseColor('#FFFFFF')
+                strip.stripColor(c)
             
             elif cmd == 'off':
                 print(f"💡 lights out")

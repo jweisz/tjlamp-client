@@ -7,12 +7,12 @@ import json
 import argparse
 import asyncio
 import websockets
+import configparser
 
 from LEDStrip import LEDStrip
 
-async def listen():
-    strip = LEDStrip(1)
-    uri = "ws://tjlamp.mybluemix.net:80/lamp"
+async def listen(uri, num_leds):
+    strip = LEDStrip(num_leds)
     async with websockets.connect(uri) as websocket:
         print(f"🔌 connected to {uri}…")
         async for message in websocket:
@@ -21,20 +21,36 @@ async def listen():
             msg = json.loads(message)
             cmd = msg.get('cmd', '')
             
+            # shine -> stripColor(color)
+            # pulse -> theaterChase(color)
+            # rainbow -> rainbowCycle()
+            # rainbowPulse -> theaterChaseRainbow()
+            # off -> blankStrip()
             if cmd == 'shine':
                 color = msg.get('color', '#FFFFFF')
                 c = strip.parseColor(color)
-                print(f"💡 shining with color {color}: {c}")
-                await asyncio.create_task(strip.stripColor(c))
-                
+                print(f"💡 shining with color {color}: {strip.colorToHex(c)}")
+                strip.stripColor(c)
+            
+            elif cmd == 'pulse':
+                color = msg.get('color', '#FFFFFF')
+                c = strip.parseColor(color)
+                print(f"💡 pulsing with color {color}: {strip.colorToHex(c)}")
+                strip.theaterChase(c)
+
             elif cmd == 'rainbow':
                 print(f"❤️💙💚💜💛🧡🤍 rainbow!")
-                await asyncio.create_task(strip.rainbow())
+                strip.rainbowCycle()
 
+            elif cmd == 'rainbowPulse':
+                print(f"❤️💙💚💜💛🧡🤍 pulsing rainbow!")
+                strip.theaterChaseRainbow()
+            
             elif cmd == 'off':
                 print(f"💡 lights out")
-                c = strip.parseColor('black')
-                await asyncio.create_task(strip.stripColor(c))
+                strip.blankStrip()
+    
+    strip.blankStrip()
     print(f"🔌 disconnected")
 
 # Main program logic follows:
@@ -43,10 +59,11 @@ if __name__ == '__main__':
     if not os.geteuid() == 0:
         sys.exit('This script must be run as root in order to control the LED.')
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-n', '--num_leds', type=int, help='number of LEDs in the strip', default=1)
-    args = parser.parse_args()
-
+    # config params
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+    ws_url = config['tjlamp'].get('ws_url', 'ws://tjlamp.mybluemix.net:80/lamp')
+    num_leds = config['tjlamp'].get('num_leds', 60)
+    
     # open the web socket and listen for commands
-    n = args.num_leds
-    asyncio.get_event_loop().run_until_complete(listen(n))
+    asyncio.get_event_loop().run_until_complete(listen(ws_url, num_leds))

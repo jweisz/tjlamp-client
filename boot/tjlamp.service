@@ -1,0 +1,14 @@
+[Unit]
+Description=TJLamp
+After=multi-user.target
+
+[Service]
+Type=idle
+User=root
+ExecStart=/usr/bin/python3 /home/pi/Desktop/tjlamp-client/tjlamp-client.py
+Restart=on-failure
+RestartSec=10
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target

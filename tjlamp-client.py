@@ -17,6 +17,8 @@ async def listen(uri, num_leds):
 
     async with websockets.connect(uri) as websocket:
         print(f"🔌 connected to {uri}…")
+        strip.quickFlash(Color(64, 80, 0), 3)
+
         async for message in websocket:
             # message = await websocket.recv()
             print(f"🎉 received message: {message}")
@@ -59,8 +61,12 @@ async def listen(uri, num_leds):
                 print(f"💡 lights out")
                 strip.blankStrip()
     
+    print(f"🔌 disconnected, panic!")
     strip.blankStrip()
-    print(f"🔌 disconnected")
+    while True:
+        await asynicio.sleep(3)
+        await strip.panic()
+
 
 # Main program logic follows:
 if __name__ == '__main__':

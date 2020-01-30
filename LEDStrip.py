@@ -185,3 +185,22 @@ class LEDStrip():
             except asyncio.CancelledError:
                 await self._blankStrip()
         self.runTask(_theaterChaseRainbow(wait_ms))
+    
+    async def panic(self):
+        """Three fast pulses of red."""
+        await self.quickFlash(Color(255, 0, 0), 3)
+    
+    async def quickFlash(self, color, n_pulses=3, wait_ms=50):
+        def on():
+            for i in range(self.strip.numPixels()):
+                self.strip.setPixelColor(i, color)
+            self.strip.show()
+        def off():
+            for i in range(self.strip.numPixels()):
+                self.strip.setPixelColor(i, Color(0, 0 0))
+            self.strip.show()
+        for i in range(n_pulses):
+            on()
+            await asyncio.sleep(wait_ms / 1000.0)
+            off()
+            await asyncio.sleep(wait_ms / 1000.0)

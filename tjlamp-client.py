@@ -81,7 +81,7 @@ if __name__ == '__main__':
     # load config params
     ws_url = 'ws://localhost:8080/lamp'
     num_leds = 60
-    if args.config != '' and os.file.exists(args.config):
+    if args.config != '' and os.path.exists(args.config):
         config = configparser.ConfigParser()
         config.read(args.config)
         ws_url = config['tjlamp'].get('ws_url')

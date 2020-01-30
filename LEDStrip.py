@@ -68,14 +68,16 @@ class LEDStrip():
     
     # Run a new task in the background, cancelling any previous running task
     def runTask(self, func):
-        # cancel any existing task
-        await self.cancelTask()
+        async def _runTask(func):
+            # cancel any existing task
+            await self.cancelTask()
 
-        # blank the LEDs
-        self.blankStrip()
+            # blank the LEDs
+            self.blankStrip()
     
-        # fire up the new task
-        self.task = asyncio.create_task(func)
+            # fire up the new task
+            self.task = asyncio.create_task(func)
+        asyncio.create_task(_runTask(func))
     
     # Cancel the currently running task
     async def cancelTask(self):

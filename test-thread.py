@@ -76,6 +76,23 @@ async def main2():
     await foo.cancelTask()
     print("dead")
 
+async def main3():
+    async def _foo():
+        for i in range(10):
+            print(i)
+    print("launching foo()")
+    task = asyncio.create_task(_foo())
+    print("waiting 5 sec")
+    await asyncio.sleep(5)
+    print("cancelling foo() [which should already have finished]")
+    task.cancel()
+    try:
+        print("awaiting task")
+        await task
+        print("finished await task")
+    except asyncio.CancelledError:
+        print("got an asyncio.CancelledError")
+
 # Main program logic follows:
 if __name__ == '__main__':
-    asyncio.get_event_loop().run_until_complete(main2())
+    asyncio.get_event_loop().run_until_complete(main3())

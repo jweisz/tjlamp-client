@@ -73,7 +73,7 @@ class LEDStrip():
             await self.cancelTask()
 
             # blank the LEDs
-            self.blankStrip()
+            await self._blankStrip()
     
             # fire up the new task
             self.task = asyncio.create_task(func)
@@ -94,28 +94,40 @@ class LEDStrip():
                 pass
         print("bottom of cancelTask()")
 
-    # Set the strip to a single color
+    # Functions which illuminate / animate LEDs in various ways.
+    # These are all defined synchronously, and they work by running an asynchronous
+    # task in the background (so we can drive the LEDs while also listening on the 
+    # websocket for new commands)
     def stripColor(self, color):
-        for i in range(self.strip.numPixels()):
-            self.strip.setPixelColor(i, color)
-        self.strip.show()
+        """Shine the LEDs the given color"""
+        async def _stripColor(color):
+            for i in range(self.strip.numPixels()):
+                self.strip.setPixelColor(i, color)
+            self.strip.show()
+        self.runTask(_stripColor(color))
     
-    # Blank out the strip
     def blankStrip(self):
-        self.stripColor(Color(0, 0, 0))
-
-    # Define functions which animate LEDs in various ways.
+        """Turn off all the LEDs (as a background task)"""
+        self.runTask(self._blankStrip())
+    
+    async def _blankStrip(self):
+        """Turn off all the LEDs (as a foreground task)"""
+        for i in range(self.strip.numPixels()):
+            self.strip.setPixelColor(i, 0)
+        self.strip.show()
+        
     def colorWipe(self, colors, wait_ms=50):
         """Wipe a set of colors across display a pixel at a time."""
         async def _colorWipe(colors, wait_ms):
             try:
                 while True:
                     for color in colors:
-                        self.strip.setPixelColor(i, color)
-                        self.strip.show()
-                        await asyncio.sleep(wait_ms / 1000.0)
+                        for i in range(self.strip.numPixels()):
+                            self.strip.setPixelColor(i, color)
+                            self.strip.show()
+                            await asyncio.sleep(wait_ms / 1000.0)
             except asyncio.CancelledError:
-                self.blankStrip()
+                await self._blankStrip()
         self.runTask(_colorWipe(colors, wait_ms))
 
     def theaterChase(self, color, wait_ms=50):
@@ -131,7 +143,7 @@ class LEDStrip():
                         for i in range(0, self.strip.numPixels(), 3):
                             self.strip.setPixelColor(i + q, 0)
             except asyncio.CancelledError:
-                self.blankStrip()
+                await self._blankStrip()
         self.runTask(_theaterChase(color, wait_ms))
 
     def rainbow(self, wait_ms=20):
@@ -145,7 +157,7 @@ class LEDStrip():
                         self.strip.show()
                         await asyncio.sleep(wait_ms / 1000.0)
             except asyncio.CancelledError:
-                self.blankStrip()
+                await self._blankStrip()
         self.runTask(_rainbow(wait_ms, 1))
 
     def rainbowCycle(self, wait_ms=20):
@@ -160,7 +172,7 @@ class LEDStrip():
                         self.strip.show()
                         await asyncio.sleep(wait_ms / 1000.0)
             except asyncio.CancelledError:
-                self.blankStrip()
+                await self._blankStrip()
         self.runTask(_rainbowCycle(wait_ms, 5))
 
     def theaterChaseRainbow(self, wait_ms=50):
@@ -177,5 +189,5 @@ class LEDStrip():
                             for i in range(0, self.strip.numPixels(), 3):
                                 self.strip.setPixelColor(i + q, 0)
             except asyncio.CancelledError:
-                self.blankStrip()
+                await self._blankStrip()
         self.runTask(_theaterChaseRainbow(wait_ms))

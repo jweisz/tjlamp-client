@@ -81,12 +81,18 @@ class LEDStrip():
     
     # Cancel the currently running task
     async def cancelTask(self):
+        print("top of cancelTask()")
         if not self.task is None:
+            print("cancelling current task")
             self.task.cancel()
             try:
+                print("waiting for current task to end")
                 await self.task
+                print("current task has ended")
             except asyncio.CancelledError:
+                print("error in cancelling current task")
                 pass
+        print("bottom of cancelTask()")
 
     # Set the strip to a single color
     def stripColor(self, color):

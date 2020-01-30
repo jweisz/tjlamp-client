@@ -17,7 +17,7 @@ async def listen(uri, num_leds):
 
     async with websockets.connect(uri) as websocket:
         print(f"🔌 connected to {uri}…")
-        strip.quickFlash(strip.colorFromHex("#445500"), 3)
+        await strip.quickFlash(strip.colorFromHex("#445500"), 3)
 
         async for message in websocket:
             # message = await websocket.recv()

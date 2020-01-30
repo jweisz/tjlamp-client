@@ -73,12 +73,20 @@ if __name__ == '__main__':
     if not os.geteuid() == 0:
         sys.exit('This script must be run as root in order to control the LED.')
 
-    # config params
-    config = configparser.ConfigParser()
-    config.read('config.ini')
-    ws_url = config['tjlamp'].get('ws_url', 'ws://localhost:8080/lamp')
-    num_leds = config['tjlamp'].get('num_leds', 60)
-    num_leds = int(num_leds)
+    # figure out where the config file is
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--config', type=str, help='path to config.ini file', default='')
+    args = parser.parse_args()
+
+    # load config params
+    ws_url = 'ws://localhost:8080/lamp'
+    num_leds = 60
+    if args.config != '' and os.file.exists(args.config):
+        config = configparser.ConfigParser()
+        config.read(args.config)
+        ws_url = config['tjlamp'].get('ws_url')
+        num_leds = config['tjlamp'].get('num_leds')
+        num_leds = int(num_leds)
 
     # open the web socket and listen for commands
     asyncio.get_event_loop().run_until_complete(listen(ws_url, num_leds))

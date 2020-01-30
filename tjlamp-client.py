@@ -64,7 +64,7 @@ async def listen(uri, num_leds):
     print(f"🔌 disconnected, panic!")
     strip.blankStrip()
     while True:
-        await asynicio.sleep(3)
+        await asyncio.sleep(3)
         await strip.panic()
 
 

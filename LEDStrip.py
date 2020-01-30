@@ -197,7 +197,7 @@ class LEDStrip():
             self.strip.show()
         def off():
             for i in range(self.strip.numPixels()):
-                self.strip.setPixelColor(i, Color(0, 0 0))
+                self.strip.setPixelColor(i, Color(0, 0, 0))
             self.strip.show()
         for i in range(n_pulses):
             on()

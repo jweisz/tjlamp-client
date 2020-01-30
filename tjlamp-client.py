@@ -69,7 +69,7 @@ if __name__ == '__main__':
     # config params
     config = configparser.ConfigParser()
     config.read('config.ini')
-    ws_url = config['tjlamp'].get('ws_url', 'ws://tjlamp.mybluemix.net:80/lamp')
+    ws_url = config['tjlamp'].get('ws_url', 'ws://localhost:8080/lamp')
     num_leds = config['tjlamp'].get('num_leds', 60)
     
     # open the web socket and listen for commands

@@ -14,11 +14,11 @@ from LEDStrip import LEDStrip
 async def listen(uri, num_leds):
     strip = LEDStrip(num_leds)
     strip.blankStrip()
-    
+
     async with websockets.connect(uri) as websocket:
         print(f"🔌 connected to {uri}…")
         async for message in websocket:
-            message = await websocket.recv()
+            # message = await websocket.recv()
             print(f"🎉 received message: {message}")
             msg = json.loads(message)
             cmd = msg.get('cmd', '')

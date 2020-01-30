@@ -81,18 +81,12 @@ class LEDStrip():
     
     # Cancel the currently running task
     async def cancelTask(self):
-        print("top of cancelTask()")
         if not self.task is None:
-            print("cancelling current task")
             self.task.cancel()
             try:
-                print("waiting for current task to end")
                 await self.task
-                print("current task has ended")
             except asyncio.CancelledError:
-                print("error in cancelling current task")
                 pass
-        print("bottom of cancelTask()")
 
     # Functions which illuminate / animate LEDs in various ways.
     # These are all defined synchronously, and they work by running an asynchronous

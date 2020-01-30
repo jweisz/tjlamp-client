@@ -71,6 +71,7 @@ if __name__ == '__main__':
     config.read('config.ini')
     ws_url = config['tjlamp'].get('ws_url', 'ws://localhost:8080/lamp')
     num_leds = config['tjlamp'].get('num_leds', 60)
+    num_leds = int(num_leds)
     
     # open the web socket and listen for commands
     asyncio.get_event_loop().run_until_complete(listen(ws_url, num_leds))

@@ -112,7 +112,7 @@ class LEDStrip():
         
     def colorWipe(self, color, wait_ms=50):
         """Wipe a color across display a pixel at a time."""
-        async def _colorWipe(colors, wait_ms):
+        async def _colorWipe(color, wait_ms):
             try:
                 while True:
                     for i in range(self.strip.numPixels()):

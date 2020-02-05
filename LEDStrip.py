@@ -110,19 +110,18 @@ class LEDStrip():
             self.strip.setPixelColor(i, 0)
         self.strip.show()
         
-    def colorWipe(self, colors, wait_ms=50):
-        """Wipe a set of colors across display a pixel at a time."""
+    def colorWipe(self, color, wait_ms=50):
+        """Wipe a color across display a pixel at a time."""
         async def _colorWipe(colors, wait_ms):
             try:
                 while True:
-                    for color in colors:
-                        for i in range(self.strip.numPixels()):
-                            self.strip.setPixelColor(i, color)
-                            self.strip.show()
-                            await asyncio.sleep(wait_ms / 1000.0)
+                    for i in range(self.strip.numPixels()):
+                        self.strip.setPixelColor(i, color)
+                        self.strip.show()
+                        await asyncio.sleep(wait_ms / 1000.0)
             except asyncio.CancelledError:
                 await self._blankStrip()
-        self.runTask(_colorWipe(colors, wait_ms))
+        self.runTask(_colorWipe(color, wait_ms))
 
     def theaterChase(self, color, wait_ms=50):
         """Movie theater light style chaser animation."""

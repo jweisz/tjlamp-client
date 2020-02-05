@@ -11,24 +11,34 @@ from LEDStrip import LEDStrip
 
 async def main(args):
     strip = LEDStrip(args.num_leds)
+    sleep_time = 5
 
     try:
         while True:
             print('Color wipe animations.')
-            await strip.colorWipe(Color(255, 0, 0))  # Red wipe
-            await strip.colorWipe(Color(0, 255, 0))  # Blue wipe
-            await strip.colorWipe(Color(0, 0, 255))  # Green wipe
+            strip.colorWipe(Color(255, 0, 0))  # Red wipe
+            await asyncio.sleep(sleep_time)
+            strip.colorWipe(Color(0, 255, 0))  # Blue wipe
+            await asyncio.sleep(sleep_time)
+            strip.colorWipe(Color(0, 0, 255))  # Green wipe
+            await asyncio.sleep(sleep_time)
             print('Theater chase animations.')
-            await strip.theaterChase(Color(127, 127, 127))  # White theater chase
-            await strip.theaterChase(Color(127, 0, 0))  # Red theater chase
-            await strip.theaterChase(Color(0, 0, 127))  # Blue theater chase
+            strip.theaterChase(Color(127, 127, 127))  # White theater chase
+            await asyncio.sleep(sleep_time)
+            strip.theaterChase(Color(127, 0, 0))  # Red theater chase
+            await asyncio.sleep(sleep_time)
+            strip.theaterChase(Color(0, 0, 127))  # Blue theater chase
+            await asyncio.sleep(sleep_time)
             print('Rainbow animations.')
-            await strip.rainbow()
-            await strip.rainbowCycle()
-            await strip.theaterChaseRainbow()
+            strip.rainbow()
+            await asyncio.sleep(sleep_time)
+            strip.rainbowCycle()
+            await asyncio.sleep(sleep_time)
+            strip.theaterChaseRainbow()
+            await asyncio.sleep(sleep_time)
 
     except KeyboardInterrupt:
-        await strip.colorWipe(Color(0, 0, 0), 10)
+        strip.colorWipe(Color(0, 0, 0), 10)
 
 # Main program logic follows:
 if __name__ == '__main__':

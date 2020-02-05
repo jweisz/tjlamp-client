@@ -15,6 +15,7 @@ async def listen(uri, num_leds):
     strip = LEDStrip(num_leds)
     strip.blankStrip()
 
+    print(f"🔌 connecting to {uri}…")
     async with websockets.connect(uri) as websocket:
         print(f"🔌 connected to {uri}…")
         await strip.quickFlash(strip.colorFromHex("#445500"), 3)
@@ -82,6 +83,7 @@ if __name__ == '__main__':
     ws_url = 'ws://localhost:8080/lamp'
     num_leds = 60
     if args.config != '' and os.path.exists(args.config):
+        print(f"🛠 reading config from {args.config}")
         config = configparser.ConfigParser()
         config.read(args.config)
         ws_url = config['tjlamp'].get('ws_url')

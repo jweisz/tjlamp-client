@@ -38,9 +38,9 @@ async def main2():
     
     while True:
         wiringpi.pwmWrite(13, 50)
-        await async.sleep(1)
+        await asyncio.sleep(1)
         wiringpi.pwmWrite(13, 210)
-        await async.sleep(1)
+        await asyncio.sleep(1)
 
 
 # TJBot.prototype._SERVO_ARM_BACK = 500;

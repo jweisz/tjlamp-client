@@ -5,12 +5,12 @@ import wiringpi
 import asyncio
 
 async def main():
-    GPIO.setmode(GPIO.BOARD) # Sets the pin numbering system to use the physical layout
+    GPIO.setmode(GPIO.BCM) # Sets the pin numbering system to use the BCM layout
 
-    # Set up pin 7 for PWM
-    GPIO.setup(7, GPIO.OUT)  # Sets up pin 7 to an output (instead of an input)
-    p = GPIO.PWM(7, 50)      # Sets up pin 7 as a PWM pin
-    p.start(0)               # Starts running PWM on the pin and sets it to 0
+    # Set up pin 13 for PWM
+    GPIO.setup(13, GPIO.OUT)  # Sets up pin 13 to an output (instead of an input)
+    p = GPIO.PWM(13, 50)      # Sets up pin 13 as a PWM pin
+    p.start(0)                # Starts running PWM on the pin and sets it to 0
 
     # Move the servo back and forth
     p.ChangeDutyCycle(3)     # Changes the pulse width to 3 (so moves the servo)
@@ -26,8 +26,8 @@ async def main2():
     # use 'GPIO naming'
     wiringpi.wiringPiSetupGpio()
     
-    # set #7 to be a PWM output
-    wiringpi.pinMode(7, wiringpi.GPIO.PWM_OUTPUT)
+    # set #13 to be a PWM output
+    wiringpi.pinMode(13, wiringpi.GPIO.PWM_OUTPUT)
     
     # set the PWM mode to milliseconds stype
     wiringpi.pwmSetMode(wiringpi.GPIO.PWM_MODE_MS)
@@ -38,10 +38,10 @@ async def main2():
     
     while True:
         for pulse in range(50, 250, 10):
-                wiringpi.pwmWrite(18, pulse)
+                wiringpi.pwmWrite(13, pulse)
                 await asyncio.sleep(1)
         for pulse in range(250, 50, -10):
-                wiringpi.pwmWrite(18, pulse)
+                wiringpi.pwmWrite(13, pulse)
                 await asyncio.sleep(1)
 
 # TJBot.prototype._SERVO_ARM_BACK = 500;

@@ -23,7 +23,7 @@ Wrap a NeoPixel strip (60 LEDs) around the inside of TJBot. Cover with a translu
 |---|---|---|
 | Power  | Red     | 2 (+5V, top right) |
 | Ground | Brown   | 20 (GND, 10 pins down on the right)   |
-| Data   | Orange  | 26 (GPIO7, 13 pins down on the right) |
+| Data   | Orange  | 33 (GPIO13, 4 pins up on the left) |
 
 ## Setup
 

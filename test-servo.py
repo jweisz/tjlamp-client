@@ -37,12 +37,11 @@ async def main2():
     wiringpi.pwmSetRange(2000)
     
     while True:
-        for pulse in range(50, 250, 10):
-                wiringpi.pwmWrite(13, pulse)
-                await asyncio.sleep(1)
-        for pulse in range(250, 50, -10):
-                wiringpi.pwmWrite(13, pulse)
-                await asyncio.sleep(1)
+        wiringpi.pwmWrite(13, 50)
+        await async.sleep(1)
+        wiringpi.pwmWrite(13, 210)
+        await async.sleep(1)
+
 
 # TJBot.prototype._SERVO_ARM_BACK = 500;
 # TJBot.prototype._SERVO_ARM_UP = 1400;

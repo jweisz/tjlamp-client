@@ -4,20 +4,31 @@ import os
 import sys
 import time
 import json
-import argparse
 import asyncio
+import argparse
 import websockets
 import configparser
 
 from LEDStrip import LEDStrip
+from Servo import Servo
 
-async def listen(uri, num_leds):
-    strip = LEDStrip(num_leds)
+async def listen(config):
+    ws_url = config['tjlamp'].get('ws_url')
+    num_leds = int(config['tjlamp'].get('num_leds'))
+    led_pin = int(config['tjlamp'].get('led_pin'))
+    led_brightness = config['tjlamp'].get('led_brightness')
+    led_brightness = max(0, min(int(led_brightness), 255))
+    servo_pin = int(config['tjlamp'].get('servo_pin'))
+    enable_wave = bool(config['tjlamp'].get('enable_wave'))
+
+    strip = LEDStrip(num_leds, pin=led_pin, brightness=led_brightness)
     strip.blankStrip()
 
-    print(f"🔌 connecting to {uri}…")
-    async with websockets.connect(uri) as websocket:
-        print(f"🔌 connected to {uri}…")
+    arm = Servo(servo_pin, enable_wave)
+
+    print(f"🔌 connecting to {ws_url}…")
+    async with websockets.connect(ws_url) as websocket:
+        print(f"🔌 connected to {ws_url}…")
         await strip.quickFlash(strip.colorFromHex("#445500"), 3)
 
         async for message in websocket:
@@ -31,16 +42,20 @@ async def listen(uri, num_leds):
             # rainbow -> rainbowCycle()
             # rainbowPulse -> theaterChaseRainbow()
             # off -> blankStrip()
+            # wave -> wave()
+            # disco -> disco()
             if cmd == 'shine':
                 color = msg.get('color', '#FFFFFF')
 
                 if color == 'rainbow':
                     print(f"❤️💙💚💜💛🧡🤍 rainbow!")
                     strip.rainbowCycle()
+                    arm.wave(2)
                 else:
                     c = strip.parseColor(color)
                     print(f"💡 shining with color {color}: {strip.colorToHex(c)}")
                     strip.stripColor(c)
+                    arm.wave(2)
             
             elif cmd == 'pulse':
                 color = msg.get('color', '#FFFFFF')
@@ -48,22 +63,35 @@ async def listen(uri, num_leds):
                 if color == 'rainbow':
                     print(f"❤️💙💚💜💛🧡🤍 pulsing rainbow!")
                     strip.theaterChaseRainbow()
+                    arm.wave(2)
                 else:
                     c = strip.parseColor(color)
                     print(f"💡 pulsing with color {color}: {strip.colorToHex(c)}")
                     strip.theaterChase(c)
+                    arm.wave(2)
             
             elif cmd == 'on':
                 print(f"💡 lights on")
                 c = strip.parseColor('#FFFFFF')
                 strip.stripColor(c)
+                arm.wave(2)
             
             elif cmd == 'off':
                 print(f"💡 lights out")
                 strip.blankStrip()
+                arm.wave(2)
+            
+            elif cmd == 'wave':
+                print(f"💪 waving")
+                arm.wave(1)
+            
+            elif cmd == 'disco':
+                print(f"🎊 disco mode!")
+                strip.disco()
     
     print(f"🔌 disconnected, panic!")
     for _ in range(3):
+        arm.wave(1)
         await strip.panic()
         await asyncio.sleep(2)
 
@@ -86,9 +114,6 @@ if __name__ == '__main__':
         print(f"🛠 reading config from {args.config}")
         config = configparser.ConfigParser()
         config.read(args.config)
-        ws_url = config['tjlamp'].get('ws_url')
-        num_leds = config['tjlamp'].get('num_leds')
-        num_leds = int(num_leds)
 
     # open the web socket and listen for commands
-    asyncio.get_event_loop().run_until_complete(listen(ws_url, num_leds))
+    asyncio.get_event_loop().run_until_complete(listen(config))

@@ -1,10 +1,11 @@
 import asyncio
+import random
 from rpi_ws281x import PixelStrip, Color
 from matplotlib import colors
 
 class LEDStrip():
     def __init__(self, count, pin=18, freq_hz=800000, dma=10, invert=False, brightness=255, channel=0):
-        print(f"💡 initializing LED strip with {count} neopixels")
+        print(f"💡 initializing LED strip with {count} neopixels on pin {pin}")
 
         # Create NeoPixel object with appropriate configuration.
         self.strip = PixelStrip(count, pin, freq_hz, dma, invert, brightness, channel)
@@ -65,6 +66,18 @@ class LEDStrip():
     # Convert a Color to hex
     def colorToHex(self, color):
         return hex(color)
+    
+    # Covert HSV to RGB
+    def hsvToRgb(self, h, s, v):
+        if s == 0.0: return (v, v, v)
+        i = int(h*6.)
+        f = (h*6.)-i; p,q,t = v*(1.-s), v*(1.-s*f), v*(1.-s*(1.-f)); i%=6
+        if i == 0: return (v, t, p)
+        if i == 1: return (q, v, p)
+        if i == 2: return (p, v, t)
+        if i == 3: return (p, q, v)
+        if i == 4: return (t, p, v)
+        if i == 5: return (v, p, q)
     
     # Run a new task in the background, cancelling any previous running task
     def runTask(self, func):
@@ -203,3 +216,32 @@ class LEDStrip():
             await asyncio.sleep(wait_ms / 1000.0)
             off()
             await asyncio.sleep(wait_ms / 1000.0)
+
+    async def disco(self, servo):
+        """Pick a random color, hopefully far away enough from the previous color"""
+        def _randomColor(h):
+            next_h = (h + random.random() + 0.05) % 1.0
+            s = 0.8 + (random.random() % 0.2)
+            v = 0.8 + (random.random() % 0.2)
+            return (next_h, s, v)
+        
+        """Disco mode!"""
+        async def _disco(servo):
+            try:
+                h = random.random()
+
+                while True:
+                    # random color
+                    (h, s, v) = _randomColor(h)
+                    (r, g, b) = self.hsvToRgb(h, s, v)
+                    self.theaterChase(Color(r * 255, g * 255, b * 255))
+
+                    # random wave count, [1-2] times
+                    servo.wave(random.randint(1, 2))
+
+                    # random sleep, [1-5] seconds
+                    duration = random.randint(1, 5)
+                    await asyncio.sleep(duration)
+            except asyncio.CancelledError:
+                await self._blankStrip()
+        self.runTask(_disco(servo))

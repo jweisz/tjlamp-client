@@ -1,3 +1,7 @@
 [tjlamp]
 ws_url=ws://localhost:8080/lamp
 num_leds=60
+led_pin=18
+led_brightness=255
+servo_pin=13
+enable_wave=True

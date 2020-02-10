@@ -10,7 +10,7 @@ import websockets
 import configparser
 
 from LEDStrip import LEDStrip
-from Servo import Servo
+from Servo import ServoPigpio
 
 async def listen(config):
     ws_url = config['tjlamp'].get('ws_url')

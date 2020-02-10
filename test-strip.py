@@ -47,7 +47,7 @@ if __name__ == '__main__':
         sys.exit('This script must be run as root in order to control the LED.')
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('-n', '--num_leds', type=int, help='number of LEDs in the strip', default=1)
+    parser.add_argument('-n', '--num_leds', type=int, help='number of LEDs in the strip', default=60)
     args = parser.parse_args()
 
     asyncio.get_event_loop().run_until_complete(main(args))

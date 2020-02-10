@@ -50,17 +50,13 @@ async def listen(config):
                 if color == 'rainbow':
                     print(f"❤️💙💚💜💛🧡🤍 rainbow!")
                     strip.rainbowCycle()
-                    arm.wave(2)
                 elif color == 'disco':
                     print(f"🎊 disco mode!")
-                    strip.disco(arm)
+                    strip.disco()
                 else:
                     c = strip.parseColor(color)
                     print(f"💡 shining with color {color}: {strip.colorToHex(c)}")
                     strip.stripColor(c)
-
-                    if not color == 'black':
-                        arm.wave(2)
             
             elif cmd == 'pulse':
                 color = msg.get('color', '#FFFFFF')
@@ -68,18 +64,15 @@ async def listen(config):
                 if color == 'rainbow':
                     print(f"❤️💙💚💜💛🧡🤍 pulsing rainbow!")
                     strip.theaterChaseRainbow()
-                    arm.wave(2)
                 else:
                     c = strip.parseColor(color)
                     print(f"💡 pulsing with color {color}: {strip.colorToHex(c)}")
                     strip.theaterChase(c)
-                    arm.wave(2)
             
             elif cmd == 'on':
                 print(f"💡 lights on")
                 c = strip.parseColor('#FFFFFF')
                 strip.stripColor(c)
-                arm.wave(2)
             
             elif cmd == 'off':
                 print(f"💡 lights out")

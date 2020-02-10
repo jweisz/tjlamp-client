@@ -217,7 +217,7 @@ class LEDStrip():
             off()
             await asyncio.sleep(wait_ms / 1000.0)
 
-    def disco(self, servo):
+    def disco(self):
         """Pick a random color, hopefully far away enough from the previous color"""
         def _randomColor(h):
             next_h = (h + random.random() + 0.05) % 1.0
@@ -226,7 +226,7 @@ class LEDStrip():
             return (next_h, s, v)
         
         """Disco mode!"""
-        async def _disco(servo):
+        async def _disco():
             try:
                 h = random.random()
 
@@ -248,9 +248,6 @@ class LEDStrip():
                             await asyncio.sleep(50 / 1000.0)
                             for i in range(0, self.strip.numPixels(), 3):
                                 self.strip.setPixelColor(i + q, 0)
-                
-                # blank strip when done
-                await self._blankStrip()
             except asyncio.CancelledError:
                 await self._blankStrip()
-        self.runTask(_disco(servo))
+        self.runTask(_disco())

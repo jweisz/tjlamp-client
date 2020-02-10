@@ -19,7 +19,7 @@ async def listen(config):
     led_brightness = config['tjlamp'].get('led_brightness')
     led_brightness = max(0, min(int(led_brightness), 255))
     servo_pin = int(config['tjlamp'].get('servo_pin'))
-    enable_wave = bool(config['tjlamp'].get('enable_wave'))
+    enable_wave = config['tjlamp'].get('enable_wave').lower() in ("yes", "true", "t", "1")
 
     strip = LEDStrip(num_leds, pin=led_pin, brightness=led_brightness)
     strip.blankStrip()

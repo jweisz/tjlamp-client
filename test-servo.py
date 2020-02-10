@@ -43,7 +43,7 @@ async def main(pin):
 async def main2(pin):
     arm = Servo(pin, enable=True)
     try:
-        arm.wave(2)
+        await arm.wave(2)
         await asyncio.sleep(1)
     except KeyboardInterrupt:
         arm.armUp()

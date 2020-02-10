@@ -237,7 +237,7 @@ class LEDStrip():
                     self.theaterChase(Color(int(r*255), int(g*255), int(b*255)))
 
                     # random wave count, [1-2] times
-                    servo.wave(random.randint(1, 2))
+                    await servo.wave(random.randint(1, 2))
 
                     # random sleep, [1-5] seconds
                     duration = random.randint(1, 5)

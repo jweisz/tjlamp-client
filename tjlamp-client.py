@@ -51,6 +51,9 @@ async def listen(config):
                     print(f"❤️💙💚💜💛🧡🤍 rainbow!")
                     strip.rainbowCycle()
                     await arm.wave(2)
+                elif color == 'disco':
+                    print(f"🎊 disco mode!")
+                    strip.disco(arm)
                 else:
                     c = strip.parseColor(color)
                     print(f"💡 shining with color {color}: {strip.colorToHex(c)}")
@@ -83,10 +86,6 @@ async def listen(config):
             elif cmd == 'wave':
                 print(f"💪 waving")
                 await arm.wave(1)
-            
-            elif cmd == 'disco':
-                print(f"🎊 disco mode!")
-                strip.disco(arm)
     
     print(f"🔌 disconnected, panic!")
     for _ in range(3):

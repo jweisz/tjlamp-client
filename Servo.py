@@ -23,9 +23,6 @@ class Servo():
         # divide down clock
         wiringpi.pwmSetClock(192)
         wiringpi.pwmSetRange(2000)
-        
-        # raise the arm
-        self.armUp()
     
     def armBack(self):
         if not self.enable:

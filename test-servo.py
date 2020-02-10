@@ -44,7 +44,7 @@ async def main2(pin):
     arm = ServoPigpio(pin, enable=True)
     try:
         while True:
-            await arm.wave(1)
+            arm.wave(1)
             await asyncio.sleep(2)
     except KeyboardInterrupt:
         arm.armUp()
@@ -60,4 +60,4 @@ if __name__ == '__main__':
     parser.add_argument('--pin', type=int, help='BCM PIN number the servo is attached to', default=13)
     args = parser.parse_args()
 
-    asyncio.get_event_loop().run_until_complete(main(args.pin))
+    asyncio.get_event_loop().run_until_complete(main2(args.pin))

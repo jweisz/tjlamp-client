@@ -31,7 +31,7 @@ class Servo():
         if not self.enable:
             print(f"❌ suppressing armBack(), enable is False")
             return
-        wiringpi.pwmWrite(self.pin, 50)
+        wiringpi.pwmWrite(self.pin, 60)
 
     def armUp(self):
         if not self.enable:
@@ -43,7 +43,7 @@ class Servo():
         if not self.enable:
             print(f"❌ suppressing armDown(), enable is False")
             return
-        wiringpi.pwmWrite(self.pin, 230)
+        wiringpi.pwmWrite(self.pin, 240)
 
     def wave(self, count):
         if not self.enable:

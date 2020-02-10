@@ -5,13 +5,13 @@ import wiringpi
 import asyncio
 
 def armBack(pin):
-    wiringpi.pwmWrite(pin, 50)
+    wiringpi.pwmWrite(pin, 60)
 
 def armUp(pin):
     wiringpi.pwmWrite(pin, 140)
 
 def armDown(pin):
-    wiringpi.pwmWrite(pin, 230)
+    wiringpi.pwmWrite(pin, 240)
 
 async def main(pin):
     # use 'GPIO naming'

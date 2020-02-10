@@ -234,7 +234,7 @@ class LEDStrip():
                     # random color
                     (h, s, v) = _randomColor(h)
                     (r, g, b) = self.hsvToRgb(h, s, v)
-                    self.theaterChase(Color(r * 255, g * 255, b * 255))
+                    self.theaterChase(Color(int(r*255), int(g*255), int(b*255)))
 
                     # random wave count, [1-2] times
                     servo.wave(random.randint(1, 2))

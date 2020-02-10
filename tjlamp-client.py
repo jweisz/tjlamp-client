@@ -58,7 +58,9 @@ async def listen(config):
                     c = strip.parseColor(color)
                     print(f"💡 shining with color {color}: {strip.colorToHex(c)}")
                     strip.stripColor(c)
-                    arm.wave(2)
+
+                    if not color == 'black':
+                        arm.wave(2)
             
             elif cmd == 'pulse':
                 color = msg.get('color', '#FFFFFF')

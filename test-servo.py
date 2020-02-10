@@ -40,7 +40,7 @@ async def main(pin):
     except KeyboardInterrupt:
         armBack(pin)
 
-def main2(pin):
+async def main2(pin):
     arm = Servo(pin, enable=True)
     try:
         arm.wave(2)

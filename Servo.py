@@ -1,3 +1,4 @@
+import time
 import pigpio
 import wiringpi
 import asyncio
@@ -34,16 +35,16 @@ class ServoPigpio():
             return
         self.pi.set_servo_pulsewidth(self.pin, self.SERVO_DOWN)
 
-    async def wave(self, count):
+    def wave(self, count):
         if not self.enable:
             return
         for _ in range(count):
             self.armUp()
-            await asyncio.sleep(0.2)
+            time.sleep(0.2)
             self.armDown()
-            await asyncio.sleep(0.2)
+            time.sleep(0.2)
             self.armUp()
-            await asyncio.sleep(0.2)
+            time.sleep(0.2)
 
 class ServoWiringPi():
     """Control the servo using WiringPi. Note that this conflicts with using the NeoPixels

@@ -230,18 +230,23 @@ class LEDStrip():
             try:
                 h = random.random()
 
-                while True:
+                # repeat 3-5 times
+                count = random.randint(3, 5)
+                for _ in range(count):
                     # random color
                     (h, s, v) = _randomColor(h)
                     (r, g, b) = self.hsvToRgb(h, s, v)
                     self.theaterChase(Color(int(r*255), int(g*255), int(b*255)))
 
                     # random wave count, [1-2] times
-                    await servo.wave(random.randint(1, 2))
-
-                    # random sleep, [1-5] seconds
-                    duration = random.randint(1, 5)
+                    servo.wave(random.randint(1, 2))
+                    
+                    # random sleep, [1-2] seconds
+                    duration = random.randint(1, 2)
                     await asyncio.sleep(duration)
+                
+                # blank strip when done
+                await self._blankStrip()
             except asyncio.CancelledError:
                 await self._blankStrip()
         self.runTask(_disco(servo))

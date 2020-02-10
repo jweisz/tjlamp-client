@@ -79,7 +79,6 @@ async def listen(config):
             elif cmd == 'off':
                 print(f"💡 lights out")
                 strip.blankStrip()
-                await arm.wave(2)
             
             elif cmd == 'wave':
                 print(f"💪 waving")

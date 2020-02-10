@@ -217,7 +217,7 @@ class LEDStrip():
             off()
             await asyncio.sleep(wait_ms / 1000.0)
 
-    async def disco(self, servo):
+    def disco(self, servo):
         """Pick a random color, hopefully far away enough from the previous color"""
         def _randomColor(h):
             next_h = (h + random.random() + 0.05) % 1.0

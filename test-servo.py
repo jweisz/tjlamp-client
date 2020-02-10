@@ -23,11 +23,11 @@ async def main(pin):
     wiringpi.pinMode(pin, wiringpi.GPIO.PWM_OUTPUT)
     
     # set the PWM mode to milliseconds stype
-    wiringpi.pwmSetMode(wiringpi.GPIO.PWM_MODE_MS)
+    #wiringpi.pwmSetMode(wiringpi.GPIO.PWM_MODE_MS)
     
     # divide down clock
-    wiringpi.pwmSetClock(192)
-    wiringpi.pwmSetRange(2000)
+    #wiringpi.pwmSetClock(192)
+    #wiringpi.pwmSetRange(2000)
     
     try:
         while True:
@@ -60,4 +60,4 @@ if __name__ == '__main__':
     parser.add_argument('--pin', type=int, help='BCM PIN number the servo is attached to', default=13)
     args = parser.parse_args()
 
-    asyncio.get_event_loop().run_until_complete(main2(args.pin))
+    asyncio.get_event_loop().run_until_complete(main(args.pin))

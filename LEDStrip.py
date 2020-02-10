@@ -230,9 +230,7 @@ class LEDStrip():
             try:
                 h = random.random()
 
-                # repeat 3-5 times
-                count = random.randint(3, 5)
-                for _ in range(count):
+                while True:
                     # random color
                     (h, s, v) = _randomColor(h)
                     (r, g, b) = self.hsvToRgb(h, s, v)
@@ -241,11 +239,8 @@ class LEDStrip():
                     b = int(b*255)
                     color = Color(r,g,b)
 
-                    # random wave count, [1-2] times
-                    servo.wave(random.randint(1, 2))
-                    
-                    # random theatre duration, [12-48] times
-                    for _ in range(random.randint(12,48)):
+                    # random theatre duration, [4-32] times
+                    for _ in range(random.randint(4,32)):
                         for q in range(3):
                             for i in range(0, self.strip.numPixels(), 3):
                                 self.strip.setPixelColor(i + q, color)

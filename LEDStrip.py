@@ -220,7 +220,7 @@ class LEDStrip():
     def disco(self):
         """Pick a random color, hopefully far away enough from the previous color"""
         def _randomColor(h):
-            next_h = (h + random.random() + 0.05) % 1.0
+            next_h = (h + 0.618033988749895) % 1.0
             s = 0.8 + (random.random() % 0.2)
             v = 0.8 + (random.random() % 0.2)
             return (next_h, s, v)

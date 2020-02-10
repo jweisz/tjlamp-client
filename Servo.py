@@ -9,6 +9,7 @@ class Servo():
         self.enable = enable
 
         if not self.enable:
+            print("❌ servo disabled")
             return
         
         # use 'GPIO naming'

@@ -50,12 +50,12 @@ async def listen(config):
                 if color == 'rainbow':
                     print(f"❤️💙💚💜💛🧡🤍 rainbow!")
                     strip.rainbowCycle()
-                    arm.wave(2)
+                    await arm.wave(2)
                 else:
                     c = strip.parseColor(color)
                     print(f"💡 shining with color {color}: {strip.colorToHex(c)}")
                     strip.stripColor(c)
-                    arm.wave(2)
+                    await arm.wave(2)
             
             elif cmd == 'pulse':
                 color = msg.get('color', '#FFFFFF')
@@ -63,35 +63,35 @@ async def listen(config):
                 if color == 'rainbow':
                     print(f"❤️💙💚💜💛🧡🤍 pulsing rainbow!")
                     strip.theaterChaseRainbow()
-                    arm.wave(2)
+                    await arm.wave(2)
                 else:
                     c = strip.parseColor(color)
                     print(f"💡 pulsing with color {color}: {strip.colorToHex(c)}")
                     strip.theaterChase(c)
-                    arm.wave(2)
+                    await arm.wave(2)
             
             elif cmd == 'on':
                 print(f"💡 lights on")
                 c = strip.parseColor('#FFFFFF')
                 strip.stripColor(c)
-                arm.wave(2)
+                await arm.wave(2)
             
             elif cmd == 'off':
                 print(f"💡 lights out")
                 strip.blankStrip()
-                arm.wave(2)
+                await arm.wave(2)
             
             elif cmd == 'wave':
                 print(f"💪 waving")
-                arm.wave(1)
+                await arm.wave(1)
             
             elif cmd == 'disco':
                 print(f"🎊 disco mode!")
-                strip.disco()
+                strip.disco(arm)
     
     print(f"🔌 disconnected, panic!")
     for _ in range(3):
-        arm.wave(1)
+        await arm.wave(1)
         await strip.panic()
         await asyncio.sleep(2)
 

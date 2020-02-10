@@ -45,7 +45,7 @@ class Servo():
             return
         wiringpi.pwmWrite(self.pin, 240)
 
-    def wave(self, count):
+    async def wave(self, count):
         if not self.enable:
             print(f"❌ suppressing wave(), enable is False")
             return

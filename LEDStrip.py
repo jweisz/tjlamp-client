@@ -236,14 +236,24 @@ class LEDStrip():
                     # random color
                     (h, s, v) = _randomColor(h)
                     (r, g, b) = self.hsvToRgb(h, s, v)
-                    self.theaterChase(Color(int(r*255), int(g*255), int(b*255)))
+                    r = int(r*255)
+                    g = int(g*255)
+                    b = int(b*255)
+                    c = Color(r,g,b)
 
                     # random wave count, [1-2] times
                     servo.wave(random.randint(1, 2))
                     
-                    # random sleep, [1-2] seconds
-                    duration = random.randint(1, 2)
-                    await asyncio.sleep(duration)
+                    # random theatre duration, [12-48] times
+                    for _ in range(random.randint(12,48)):
+                        for j in range(256):
+                            for q in range(3):
+                                for i in range(0, self.strip.numPixels(), 3):
+                                    self.strip.setPixelColor(i + q, self.wheel((i + j) % 255))
+                                self.strip.show()
+                                await asyncio.sleep(wait_ms / 1000.0)
+                                for i in range(0, self.strip.numPixels(), 3):
+                                    self.strip.setPixelColor(i + q, 0)
                 
                 # blank strip when done
                 await self._blankStrip()

@@ -27,25 +27,21 @@ class Servo():
     
     def armBack(self):
         if not self.enable:
-            print(f"❌ suppressing armBack(), enable is False")
             return
         wiringpi.pwmWrite(self.pin, 60)
 
     def armUp(self):
         if not self.enable:
-            print(f"❌ suppressing armUp(), enable is False")
             return
         wiringpi.pwmWrite(self.pin, 140)
 
     def armDown(self):
         if not self.enable:
-            print(f"❌ suppressing armDown(), enable is False")
             return
         wiringpi.pwmWrite(self.pin, 240)
 
     async def wave(self, count):
         if not self.enable:
-            print(f"❌ suppressing wave(), enable is False")
             return
         for _ in range(count):
             self.armUp()

@@ -24,7 +24,7 @@ async def listen(config):
     strip = LEDStrip(num_leds, pin=led_pin, brightness=led_brightness)
     strip.blankStrip()
 
-    arm = Servo(servo_pin, enable_wave)
+    arm = ServoPigpio(servo_pin, enable_wave)
 
     print(f"🔌 connecting to {ws_url}…")
     async with websockets.connect(ws_url) as websocket:

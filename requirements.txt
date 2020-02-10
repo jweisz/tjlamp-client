@@ -2,3 +2,4 @@ websockets
 rpi_ws281x
 matplotlib
 wiringpi
+pigpio

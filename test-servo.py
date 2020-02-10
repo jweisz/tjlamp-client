@@ -4,7 +4,7 @@ import argparse
 import wiringpi
 import asyncio
 
-from Servo import Servo
+from Servo import ServoPigpio
 
 def armBack(pin):
     wiringpi.pwmWrite(pin, 60)
@@ -41,7 +41,7 @@ async def main(pin):
         armBack(pin)
 
 async def main2(pin):
-    arm = Servo(pin, enable=True)
+    arm = ServoPigpio(pin, enable=True)
     try:
         while True:
             await arm.wave(1)

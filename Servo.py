@@ -1,7 +1,55 @@
+import pigpio
 import wiringpi
 import asyncio
 
-class Servo():
+class ServoPigpio():
+    def __init__(self, pin=13, enable=True):
+        self.pin = pin
+        self.enable = enable
+
+        self.SERVO_BACK = 500
+        self.SERVO_UP = 1400
+        self.SERVO_DOWN = 2300
+
+        if not self.enable:
+            if not self.enable:
+            print("❌ servo disabled")
+            return
+        
+        self.pi = pigpio.pi()
+        if not pi.connected:
+            throw Exception("pigpio unable to connect to pigpiod daemon. try running sudo pigpiod (or sudo systemctl enable pigpiod).")
+    
+    def armBack(self):
+        if not self.enable:
+            return
+        self.pi.set_servo_pulsewidth(self.PIN, self.SERVO_BACK)
+
+    def armUp(self):
+        if not self.enable:
+            return
+        self.pi.set_servo_pulsewidth(self.PIN, self.SERVO_UP)
+
+    def armDown(self):
+        if not self.enable:
+            return
+        self.pi.set_servo_pulsewidth(self.PIN, self.SERVO_DOWN)
+
+    async def wave(self, count):
+        if not self.enable:
+            return
+        for _ in range(count):
+            self.armUp()
+            await asyncio.sleep(0.2)
+            self.armDown()
+            await asyncio.sleep(0.2)
+            self.armUp()
+            await asyncio.sleep(0.2)
+
+class ServoWiringPi():
+    """Control the servo using WiringPi. Note that this conflicts with using the NeoPixels
+    due to PWM issues, so our real Servo class will be based on pigpio (which somehow avoids
+    the issue."""
     def __init__(self, pin=13, enable=True):
         print(f"💪 initializing servo pin {pin} (enabled: {enable})")
 
